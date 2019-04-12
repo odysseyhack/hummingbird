@@ -1,4 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+
+import 'package:grpc/grpc.dart';
+
+import 'package:hummingbird/generated/hummingbird.pb.dart';
+import 'package:hummingbird/generated/hummingbird.pbgrpc.dart';
+import 'package:hummingbird/network.dart';
 
 class StatusScreen extends StatefulWidget {
   StatusScreen({Key key, this.title}) : super(key: key);
@@ -46,8 +54,21 @@ class _StatusScreenState extends State<StatusScreen> {
             ),
             RaisedButton(
               child: Text("Cast again"),
-              onPressed: () {
-                // call grpc
+              onPressed: () async {
+                final channel =
+                    Network.createInsecureChannel('192.168.8.190', 50051);
+                final stub = ChatClient(channel);
+
+                final name = 'world';
+
+                try {
+                  var response =
+                      await stub.sayHello(new HelloRequest()..name = name);
+                  print('Greeter client received: ${response.message}');
+                } catch (e) {
+                  print('Caught error: $e');
+                }
+                await channel.shutdown();
               },
             )
           ],
