@@ -32,8 +32,8 @@ export default {
     this.subscribe();
   },
   mqtt: {
-    "download/finished/#": function(data, topic) {
-      console.log(data, topic);
+    "hiber/faker": function(data, topic) {
+      console.log(JSON.parse(data));
     }
   },
   methods: {

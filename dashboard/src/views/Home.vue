@@ -12,92 +12,15 @@
 </template>
 
 <script>
-import ProgressBar from "vue-simple-progress";
 export default {
   name: "Home",
-  components: {
-    ProgressBar
-  },
+  components: {},
   data() {
-    return {
-      cameras_online: [],
-      enable_scan: false,
-      enable_download: false,
-      watchdog: null,
-      clickCounter: 0,
-      clickTimer: null
-    };
+    return {};
   },
-  computed: {
-    getCamerasOnline: function() {
-      return (this.cameras_online.length * 100) / 48;
-    },
-    getCamerasDownloaded: function() {
-      return (this.$store.getters.getDownloadedCameras.length * 100) / 48;
-    },
-    cameras_downloaded: function() {
-      return this.$store.getters.getDownloadedCameras;
-    }
-  },
-  mounted: function() {
-    if (this.$store.getters.getCameraStatus) {
-      this.enable_scan = true;
-    }
-    if (this.$store.getters.getStatus.downloading) {
-      this.enable_download = true;
-    }
-  },
-  mqtt: {
-    "health/#": function(data, topic) {
-      try {
-        let id = topic.split("/")[1];
-        if (id != "main") {
-          if (!this.$store.getters.getCameraStatus) {
-            let id = topic.split("/")[1];
-            if (this.cameras_online.indexOf(id) == -1) {
-              this.cameras_online.push(id);
-            }
-            if (this.cameras_online.length > 46) {
-              this.enable_scan = true;
-              this.$store.dispatch("updateCameraStatus", true);
-              this.$mqtt.publish("led/on", "255,255,255");
-            }
-          }
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    },
-    "download/finished/#": function(data, topic) {
-      try {
-        if (this.$store.getters.getStatus.downloading) {
-          if (this.$store.getters.getDownloadedCameras.length == 48) {
-            this.enable_scan = true;
-            this.enable_download = false;
-            this.$store.dispatch("updateCameraStatus", true);
-            this.$store.dispatch("updateDownloadStatus", false);
-            this.$mqtt.publish("led/on", "255,255,255");
-          }
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    },
-    "download/finished/all": function(data, topic) {
-      this.enable_scan = true;
-      this.enable_download = false;
-      this.$store.dispatch("updateCameraStatus", true);
-      this.$store.dispatch("updateDownloadStatus", false);
-    },
-    "upload/ready/#": function(data, topic) {
-      console.log("upload/ready triggered");
-      this.enable_scan = true;
-      this.enable_download = false;
-      this.$store.dispatch("updateCameraStatus", true);
-      this.$store.dispatch("updateDownloadStatus", false);
-      this.$store.dispatch("resetCameraDownloaded", []);
-    }
-  },
+  computed: {},
+  mounted: function() {},
+  mqtt: {},
   methods: {
     goToSettings: function() {
       console.log(" -- Go To Settings");
