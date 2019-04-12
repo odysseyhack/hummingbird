@@ -1,0 +1,15 @@
+{
+    "serialports": [{
+            "name": "HiberFaker COM",
+            "vendor_id": "10c4",
+            "product_id": "ea60",
+            "baudrate": 115200
+        },
+        {
+            "name": "HiberFaker XpressUSB",
+            "vendor_id": "10c4",
+            "product_id": "ea61",
+            "baudrate": 115200
+        }
+    ]
+}
