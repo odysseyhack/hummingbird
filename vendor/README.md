@@ -3,9 +3,6 @@
 This directory contains all vendored code we will use.  Either direct
 copies or git submodules are fine.
 
-*TODO* Make sure BetterCodeHub does not punish us for anything in this
-directory.
-
 ## Skywire
 
 As we will be using skywire, it makes sense to have our own (stable)
