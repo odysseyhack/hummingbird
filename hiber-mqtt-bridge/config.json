@@ -1,15 +1,8 @@
 {
     "serialports": [{
-            "name": "HiberFaker COM",
-            "vendor_id": "10c4",
-            "product_id": "ea60",
-            "baudrate": 115200
-        },
-        {
-            "name": "HiberFaker XpressUSB",
-            "vendor_id": "10c4",
-            "product_id": "ea61",
-            "baudrate": 115200
-        }
-    ]
+        "name": "Arduino Bridge",
+        "vendor_id": "2341",
+        "product_id": "0042",
+        "baudrate": 19200
+    }]
 }
