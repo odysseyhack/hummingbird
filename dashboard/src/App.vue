@@ -31,7 +31,11 @@ export default {
   },
   mqtt: {
     "hiber/faker": function(data, topic) {
-      console.log(JSON.parse(data));
+      try {
+        console.log(JSON.parse(data));
+      } catch (err) {
+        console.log(err);
+      }
     }
   },
   methods: {

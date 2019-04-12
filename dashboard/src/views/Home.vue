@@ -112,8 +112,12 @@ export default {
   float: left;
   top: 50px;
   width: 120px;
-  height: 100vh;
-  background-color: whitesmoke;
+  height: calc(100vh - 80px);
+  background: -webkit-linear-gradient(
+    0,
+    rgba(0, 114, 255, 0.7),
+    rgba(0, 195, 255, 1)
+  );
 }
 
 .map {
@@ -122,7 +126,7 @@ export default {
   right: 0;
   top: 50px;
   width: calc(100vw - 120px);
-  height: 100vh;
+  height: calc(100vh - 80px);
   background-color: black;
 }
 
