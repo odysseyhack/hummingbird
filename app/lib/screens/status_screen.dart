@@ -57,14 +57,14 @@ class _StatusScreenState extends State<StatusScreen> {
               onPressed: () async {
                 final channel =
                     Network.createInsecureChannel('192.168.8.190', 50051);
-                final stub = ChatClient(channel);
+                final stub = HummingbirdClient(channel);
 
                 final name = 'world';
 
                 try {
                   var response =
-                      await stub.sayHello(new HelloRequest()..name = name);
-                  print('Greeter client received: ${response.message}');
+                      await stub.castStatuses(StatusRequest()..origin = name);
+                  print('Greeter client received: ${response.success}');
                 } catch (e) {
                   print('Caught error: $e');
                 }
