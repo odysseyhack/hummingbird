@@ -57,7 +57,7 @@ func findSerialPort() {
 				// loop through array serialports in config.json, check combination vendor_id and product_id
 				for i, device := range config.Serialports {
 					if strings.ToLowerSpecial(nil, port.VID) == strings.ToLowerSpecial(nil, device.VendorID) && strings.ToLowerSpecial(nil, port.PID) == strings.ToLowerSpecial(nil, device.ProductID) {
-						portID = i + 1
+						portID = i
 						portName = port.Name
 						color.Green("-- UART -- %s found at %s with index %v", device.Name, portName, portID)
 						break
@@ -82,7 +82,6 @@ func readSerial(port serial.Port) {
 	buff := make([]byte, 256)
 	for {
 		if !disableSerialRead {
-			fmt.Println("Reading input")
 			n, err := port.Read(buff)
 			if err != nil {
 				color.Red("Something went wrong, exiting...")
@@ -103,7 +102,7 @@ func publishReadSerial() {
 		msg := <-c
 		if len(msg) >= 2 {
 			// Output to terminal
-			color.White("%s", msg)
+			color.Green("%s", msg)
 		}
 	}
 }
@@ -115,7 +114,7 @@ func writeSerial(serialPort serial.Port) {
 			// disable reading
 			disableSerialRead = true
 		}
-		fmt.Println(msg)
+		color.Yellow(msg)
 		_, err := serialPort.Write([]byte(msg))
 		if err != nil {
 			log.Fatal(err)
@@ -179,6 +178,8 @@ func main() {
 
 	// write incoming data from d channel
 	go writeSerial(port)
+
+	time.Sleep(time.Second * 3)
 
 	go hiberCommand("get_modem_info\r\n")
 
