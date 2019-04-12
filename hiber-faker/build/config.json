@@ -1,0 +1,44 @@
+{
+    "general": {
+        "security": ""
+    },
+    "serialports": [
+        {
+            "name": "HiberFaker COM",
+            "vendor_id": "10c4",
+            "product_id": "ea60",
+            "baudrate": 115200
+        },
+        {
+            "name": "HiberFaker XpressUSB",
+            "vendor_id": "10c4",
+            "product_id": "ea61",
+            "baudrate": 115200
+        }
+    ],
+    "transports": [
+        {
+            "protocol": "wamp",
+            "active": true,
+            "type": "websocket",
+            "address": "ws://142.93.143.88:8080/ws",
+            "username": "",
+            "password": "",
+            "role": "",
+            "publish_topics": ["com.hiberfaker.tx"],
+            "subscribe_topics": ["com.hiberfaker.rx"],
+            "namespace": "realm1"
+        },
+        {
+            "protocol": "mqtt",
+            "active": false,
+            "type": "websocket",
+            "address": "broker.mqttdashboard.com:8000",
+            "username": "",
+            "password": "",
+            "publish_topics": ["hiber/faker/tx"],
+            "subscribe_topics": ["hiber/faker/rx"],
+            "namespace": "realm1"
+        }
+    ]
+}

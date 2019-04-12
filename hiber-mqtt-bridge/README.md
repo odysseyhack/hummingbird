@@ -2,8 +2,8 @@
 
 ## Goals
 * Stand-alone golang binary to send messages over Hiberband
-* Only depends on external MQTT broker
+* Controlled through gRPC API
 
 ## Features
-* MQTT client
+* gRPC client
 * Send UART API commands Hiber modem through Hiberfaker USB-to-UART interface

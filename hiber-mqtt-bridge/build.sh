@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Make ARM5 binary
-cd ~/go-serial-test
+cd ./go-serial-test
 make all
 
 # Copy config file
