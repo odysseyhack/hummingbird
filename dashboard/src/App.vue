@@ -1,11 +1,9 @@
 <template>
   <div id="body-background">
-    <div id="background-wrapper">
-      <div id="app">
-        <transition name="fade" mode="out-in">
-          <router-view class="view"/>
-        </transition>
-      </div>
+    <div id="app">
+      <transition name="fade" mode="out-in">
+        <router-view class="view"/>
+      </transition>
     </div>
   </div>
 </template>
@@ -157,7 +155,7 @@ body {
 }
 
 #body-background {
-  background-color: whitesmoke;
+  background-color: rgba(30, 34, 39, 1);
   width: 100%;
   height: 100%;
   top: 0;
