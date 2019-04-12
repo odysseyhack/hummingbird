@@ -147,6 +147,17 @@ func initConfiguration() {
 	color.Green("-- IO -- Successfully imported config.json")
 }
 
+func executeCommands() {
+	time.Sleep(time.Second * 3)
+	go hiberCommand("get_modem_info\r\n")
+	time.Sleep(time.Second * 2)
+	go hiberCommand("set_payload(7)\r\n")
+	time.Sleep(time.Second * 1)
+	go hiberCommand("testing")
+	time.Sleep(time.Second * 10)
+	executeCommands()
+}
+
 func main() {
 	color.Yellow("-- Init -- Hiber Control script for Hummingbird v0.0.1")
 
@@ -179,9 +190,7 @@ func main() {
 	// write incoming data from d channel
 	go writeSerial(port)
 
-	time.Sleep(time.Second * 3)
-
-	go hiberCommand("get_modem_info\r\n")
+	go executeCommands()
 
 	var input string
 	fmt.Scanln(&input)
