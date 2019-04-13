@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 class ColoredOrb extends StatelessWidget {
   final Color color;
+  final EdgeInsets margin;
 
-  ColoredOrb(this.color);
+  ColoredOrb(this.color, {this.margin = const EdgeInsets.only(right: 10)});
 
   @override
   Widget build(BuildContext context) => Container(
@@ -13,6 +14,6 @@ class ColoredOrb extends StatelessWidget {
           color: color,
           shape: BoxShape.circle,
         ),
-        margin: EdgeInsets.only(right: 10),
+        margin: margin,
       );
 }

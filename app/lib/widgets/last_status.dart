@@ -2,7 +2,9 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import 'package:hummingbird/generated/hummingbird.pbgrpc.dart';
 import 'package:hummingbird/generated/hummingbird.pb.dart';
+import 'package:hummingbird/network.dart';
 import 'package:hummingbird/status_enum.dart';
 import 'package:hummingbird/widgets/colored_orb.dart';
 
@@ -34,7 +36,18 @@ class LastStatus extends StatelessWidget {
             ),
           ),
           RaisedButton(
-            onPressed: () {},
+            onPressed: () async {
+              var channel = Network.createInsecureChannel('', 8080);
+              final stub = HummingbirdClient(channel);
+
+              try {
+                var response = await stub.castStatuses(StatusRequest());
+                print('Greeter client received: ${response.success}');
+              } catch (e) {
+                print('Caught error: $e');
+              }
+              await channel.shutdown();
+            },
             color: Colors.blue,
             child: Container(
                 constraints: BoxConstraints(minWidth: double.infinity),

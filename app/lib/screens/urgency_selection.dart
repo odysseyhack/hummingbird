@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:hummingbird/status_enum.dart';
 import 'package:hummingbird/widgets/colored_orb.dart';
+import 'package:hummingbird/widgets/text_switch.dart';
 
 class UrgencySelection extends StatelessWidget {
   final Status status;
@@ -40,7 +41,10 @@ class UrgencySelection extends StatelessWidget {
               constraints: BoxConstraints(minWidth: double.infinity),
               child: Row(
                 children: <Widget>[
-                  ColoredOrb(urgencyToColor(us.urgency)),
+                  ColoredOrb(
+                    urgencyToColor(us.urgency),
+                    margin: EdgeInsets.only(right: 5),
+                  ),
                   Expanded(child: Text(us.statement)),
                 ],
               )),
