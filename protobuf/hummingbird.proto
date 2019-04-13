@@ -7,7 +7,7 @@ option java_package = "com.milvum.hummingbird.proto";
 option java_outer_classname = "Hummingbird";
 option objc_class_prefix = "Hum";
 
-package hummingbird;
+package hummingbird.proto;
 
 // The chat service definition.
 service Hummingbird {
