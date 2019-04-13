@@ -1,3 +1,4 @@
 exclude:
 - /go-stuff/src/github.com/skycoin/.*
 - /dashboard/dist/.*
+- /dashboard/build/.*
