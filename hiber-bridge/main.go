@@ -41,6 +41,7 @@ var (
 	config            configfile
 	counter           = 0
 	exitChannel       chan struct{}
+	dir               string
 )
 
 func checkSerialPort(port *enumerator.PortDetails) {
@@ -130,9 +131,7 @@ func getPath() string {
 	return dir
 }
 
-func initConfiguration() {
-	dir := getPath()
-
+func initConfiguration(configi configfile, dir string) {
 	jsonFile, err := os.Open(fmt.Sprintf("%s/config.json", dir))
 	if err != nil {
 		log.Fatal(err)
@@ -142,7 +141,7 @@ func initConfiguration() {
 
 	byteValue, _ := ioutil.ReadAll(jsonFile)
 
-	err = json.Unmarshal(byteValue, &config)
+	err = json.Unmarshal(byteValue, &configi)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -179,7 +178,8 @@ func main() {
 	color.Yellow("-- Init -- Hiber Control script for Hummingbird v0.0.1")
 
 	// Load configuration file from ./config.json
-	initConfiguration()
+	dir = getPath()
+	initConfiguration(config, dir)
 
 	// Find a suitable connected USB device based on config
 	// Only when suitable connected USB device is found, continue with code
