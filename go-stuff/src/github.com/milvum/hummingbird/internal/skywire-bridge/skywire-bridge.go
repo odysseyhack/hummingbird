@@ -77,6 +77,26 @@ func openConnection(pk cipher.PubKey) {
 	}
 }
 
+func broadcast(messageRequest pb.MessageRequest) {
+	data, err := proto.Marshal(&messageRequest)
+	if err != nil {
+		log.Println("marshaling error: ", err)
+		return
+	}
+
+	connsMu.Lock()
+	// This is _probably_ an extreme anti-pattern.
+	defer connsMu.Unlock()
+	for pk, conn := range connections {
+
+		if _, err := conn.Write(data); err != nil {
+			log.Println("Error writing data to connection for pk: ", pk)
+		} else {
+			log.Println("Good write to connection for pk: ", pk)
+		}
+	}
+}
+
 func main() {
 	config := &app.Config{AppName: "bridge", AppVersion: "1.0", ProtocolVersion: "0.0.1"}
 	bridgeApp, err := app.Setup(config)
