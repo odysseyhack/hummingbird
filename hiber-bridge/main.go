@@ -41,6 +41,23 @@ var (
 	config            configfile
 )
 
+func checkSerialPort(port *enumerator.PortDetails) {
+	if port.IsUSB {
+		fmt.Printf("   USB name   %s\n", port.Name)
+		fmt.Printf("   USB ID     %s:%s\n", port.VID, port.PID)
+		fmt.Printf("   USB serial %s\n\n", port.SerialNumber)
+		// loop through array serialports in config.json, check combination vendor_id and product_id
+		for i, device := range config.Serialports {
+			if strings.ToLowerSpecial(nil, port.VID) == strings.ToLowerSpecial(nil, device.VendorID) && strings.ToLowerSpecial(nil, port.PID) == strings.ToLowerSpecial(nil, device.ProductID) {
+				portID = i
+				portName = port.Name
+				color.Green("-- UART -- %s found at %s with index %v", device.Name, portName, portID)
+				break
+			}
+		}
+	}
+}
+
 func findSerialPort() {
 	counter := 0
 	for {
@@ -50,27 +67,9 @@ func findSerialPort() {
 			log.Fatal(err)
 		}
 		for _, port := range ports {
-			if port.IsUSB {
-				fmt.Printf("   USB name   %s\n", port.Name)
-				fmt.Printf("   USB ID     %s:%s\n", port.VID, port.PID)
-				fmt.Printf("   USB serial %s\n\n", port.SerialNumber)
-				// loop through array serialports in config.json, check combination vendor_id and product_id
-				for i, device := range config.Serialports {
-					if strings.ToLowerSpecial(nil, port.VID) == strings.ToLowerSpecial(nil, device.VendorID) && strings.ToLowerSpecial(nil, port.PID) == strings.ToLowerSpecial(nil, device.ProductID) {
-						portID = i
-						portName = port.Name
-						color.Green("-- UART -- %s found at %s with index %v", device.Name, portName, portID)
-						break
-					}
-				}
-			}
+			checkSerialPort(port)
 		}
-		if portName == "" {
-			if counter == 1 {
-				color.White("-- IO -- Press [CTRL+C] to close program")
-				color.White("-- IO -- Plug-in Hiberfaker USB device to continue...")
-			}
-		} else {
+		if portName != "" {
 			break
 		}
 		time.Sleep(time.Second * 1)
