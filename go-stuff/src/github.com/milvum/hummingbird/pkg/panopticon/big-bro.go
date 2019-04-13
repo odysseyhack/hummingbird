@@ -13,18 +13,15 @@ func simpleSquaredDist(l1 pb.GeoLocation, l2 pb.GeoLocation) float64 {
 }
 
 func urgencyToIntensity(urgency *pb.Statuses) (intensity pb.StatusIntensity) {
-	/*intensity.WATER = urgency.WATER
-	intensity.FIRST_AID = urgency.FIRST_AID
-	intensity.FOOD = urgency.FOOD
-	intensity.SHELTER = urgency.SHELTER
-	intensity.PROTECTION = urgency.PROTECTION
-	intensity.FIRE = urgency.FIRE
-	intensity.ELECTRICITY = urgency.ELECTRICITY
-	intensity.TOOLS = urgency.TOOLS
-	intensity.TRANSPORT = urgency.TRANSPORT */
-	// TODO: Fix :
-	// cannot use urgency.TRANSPORT (type hummingbird_proto.Urgency) as type int32 in assignment
-	intensity.FIRE = 10
+	intensity.WATER = pb.Urgency_value[urgency.WATER.String()]
+	intensity.FIRST_AID = pb.Urgency_value[urgency.FIRST_AID.String()]
+	intensity.FOOD = pb.Urgency_value[urgency.FOOD.String()]
+	intensity.SHELTER = pb.Urgency_value[urgency.SHELTER.String()]
+	intensity.PROTECTION = pb.Urgency_value[urgency.PROTECTION.String()]
+	intensity.FIRE = pb.Urgency_value[urgency.FIRE.String()]
+	intensity.ELECTRICITY = pb.Urgency_value[urgency.ELECTRICITY.String()]
+	intensity.TOOLS = pb.Urgency_value[urgency.TOOLS.String()]
+	intensity.TRANSPORT = pb.Urgency_value[urgency.TRANSPORT.String()]
 	return
 }
 
