@@ -1,0 +1,11 @@
+enum Status {
+  WATER,
+  FIRST_AID,
+  FOOD,
+  SHELTER,
+  PROTECTION,
+  FIRE,
+  ELECTRICITY,
+  TOOLS,
+  TRANSPORT,
+}
