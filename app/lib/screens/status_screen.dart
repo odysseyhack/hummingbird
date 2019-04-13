@@ -7,6 +7,7 @@ import 'package:hummingbird/generated/hummingbird.pbgrpc.dart';
 import 'package:hummingbird/widgets/last_status.dart';
 import 'package:hummingbird/widgets/status_button.dart';
 import 'package:hummingbird/status_enum.dart';
+import 'package:hummingbird/widgets/text_switch.dart';
 
 class StatusScreen extends StatefulWidget {
   StatusScreen({Key key, this.title}) : super(key: key);
@@ -31,11 +32,7 @@ class _StatusScreenState extends State<StatusScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Container(
+    return  Container(
         color: Color(0xFF1E2227),
         child: Column(
           children: <Widget>[
@@ -57,7 +54,7 @@ class _StatusScreenState extends State<StatusScreen> {
                       mainAxisSpacing: 1,
                       children: _buildStatuses(context),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -76,8 +73,7 @@ class _StatusScreenState extends State<StatusScreen> {
             ),
           ],
         ),
-      ),
-    );
+      );
   }
 
   List<StatusButton> _buildStatuses(BuildContext context) {
