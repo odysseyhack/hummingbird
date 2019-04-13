@@ -1,8 +1,8 @@
 {
     "interfaces": {
-        "rpc": "localhost:3435"
+        "rpc": "localhost:3437"
     },
-    "log_level": "info",
+    "log_level": "debug",
     "local_path": "./local",
     "apps_path": "./bin",
     "manager_nodes": [],

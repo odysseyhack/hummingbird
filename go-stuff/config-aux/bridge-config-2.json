@@ -1,9 +1,9 @@
 {
     "interfaces": {
-        "rpc": "localhost:3437"
+        "rpc": "localhost:3435"
     },
-    "log_level": "info",
-    "local_path": "./local",
+    "log_level": "debug",
+    "local_path": "./local2",
     "apps_path": "./bin",
     "manager_nodes": [],
     "trusted_nodes": [],
@@ -17,7 +17,7 @@
     ],
     "routing": {
         "table": {
-            "location": "./skywire/routing.db",
+            "location": "./skywire2/routing.db",
             "type": "boltdb"
         },
         "route_finder": "https://routefinder.skywire.skycoin.net/",
