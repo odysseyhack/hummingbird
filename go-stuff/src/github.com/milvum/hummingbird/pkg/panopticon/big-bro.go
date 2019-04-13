@@ -1,9 +1,10 @@
-package intern
+package panopticon
 
 import (
-	pb "github.com/milvum/hummingbird/proto"
 	"log"
 	"math"
+
+	pb "github.com/milvum/hummingbird/proto"
 )
 
 func simpleSquaredDist(l1 pb.GeoLocation, l2 pb.GeoLocation) float64 {
