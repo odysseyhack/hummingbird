@@ -2,6 +2,8 @@ package main
 
 import (
 	"testing"
+
+	"gotest.tools/assert"
 )
 
 func TestGetPath(t *testing.T) {
@@ -28,7 +30,8 @@ func testInitConfiguration(t *testing.T) {
 }
 
 func testFindSerialPort(t *testing.T) {
-	if findSerialPort() == false {
-		t.Errorf("Coiuld not find any serial port")
-	}
+	// if findSerialPort() == false {
+	// 	t.Errorf("Coiuld not find any serial port")
+	// }
+	assert.Equal(t, findSerialPort(), false)
 }
