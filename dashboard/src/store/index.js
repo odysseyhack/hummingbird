@@ -2,6 +2,18 @@ import {
   version
 } from '../../package.json'
 
+import {
+  getters
+} from './getters.js'
+
+import {
+  mutations
+} from './mutations.js'
+
+import {
+  actions
+} from './actions.js'
+
 const state = {
   version: version,
   counter: 0,
@@ -9,35 +21,6 @@ const state = {
     system: 'connecting...',
     mqtt: false
   },
-}
-
-// mutations
-const mutations = {
-  SET_SYSTEM_STATUS: (state, status) => {
-    state.status.system = status
-  }
-}
-
-// actions
-const actions = {
-  updateSystemStatus: (context, status) => {
-    context.commit('SET_SYSTEM_STATUS', status)
-  },
-}
-
-const getters = {
-  getSystemStatus: state => {
-    return state.status.system
-  },
-  getMQTTStatus: state => {
-    return state.status.mqtt
-  },
-  getStatus: state => {
-    return state.status
-  },
-  getVersion: state => {
-    return state.version
-  }
 }
 
 export default {
