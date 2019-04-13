@@ -1,6 +1,7 @@
 # Requirement
 
 * Install the protobuf latest [protobuf compiler](https://github.com/protocolbuffers/protobuf/releases) and add the bin folder to your path.
+* You should also have a working go installation, and install the go protobuf extension by running `go get github.com/golang/protobuf/protoc-gen-go`. Confirmed to be working is go version 1.12 +.
 
 # Updating protobuf
 

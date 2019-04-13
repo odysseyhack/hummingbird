@@ -1,2 +1,4 @@
 /vendor/bin/
 /app/lib/generated/
+/go-stuff/bin/
+/go-stuff/src/**/*.pb.go
