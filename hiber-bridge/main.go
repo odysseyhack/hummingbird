@@ -61,7 +61,7 @@ func checkSerialPort(port *enumerator.PortDetails) {
 	}
 }
 
-func findSerialPort() {
+func findSerialPort() bool {
 	for {
 		counter++
 		ports, _ := enumerator.GetDetailedPortsList()
@@ -73,6 +73,7 @@ func findSerialPort() {
 		}
 		time.Sleep(time.Second * 1)
 	}
+	return true
 }
 
 func readSerial(port serial.Port) {
@@ -185,7 +186,9 @@ func main() {
 
 	// Find a suitable connected USB device based on config
 	// Only when suitable connected USB device is found, continue with code
-	findSerialPort()
+	if findSerialPort() {
+		color.Green("-- Serial -- Found serial port")
+	}
 	// -> portName = array Index in config.json/serialports
 
 	// open serial port

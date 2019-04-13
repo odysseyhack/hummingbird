@@ -19,18 +19,16 @@ func TestHiberCommand(t *testing.T) {
 	}
 }
 
-// func TestFindSerialPort(t *testing.T) {
-// 	go findSerialPort()
-// 	msg := <-d
-// 	if msg == "" {
-// 		t.Errorf("Path was expected, got nothing, want non empty dir %s", msg)
-// 	}
-// }
-
 func testInitConfiguration(t *testing.T) {
 	// var config configfile
 	dir = "./config.json"
 	if initConfiguration(dir) == false {
 		t.Errorf("Coiuld not parse config.json")
+	}
+}
+
+func testFindSerialPort(t *testing.T) {
+	if findSerialPort() == false {
+		t.Errorf("Coiuld not find any serial port")
 	}
 }
