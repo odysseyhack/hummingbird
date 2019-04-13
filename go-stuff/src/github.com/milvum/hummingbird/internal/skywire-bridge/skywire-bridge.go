@@ -32,6 +32,7 @@ func handleConn(conn net.Conn) {
 		if err != nil {
 			log.Println("unmarshaling error: ", err)
 		}
+		// TODO: Do something cool with this (forward/drop/uplink, I guess)
 	}
 }
 
