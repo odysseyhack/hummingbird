@@ -1,0 +1,44 @@
+{
+    "interfaces": {
+        "rpc": "localhost:3435"
+    },
+    "log_level": "debug",
+    "local_path": "./local2",
+    "apps_path": "./bin",
+    "manager_nodes": [],
+    "trusted_nodes": [],
+    "apps": [
+        {
+            "port": 9,
+            "auto_start": true,
+            "version": "1.0",
+            "app": "skywire-bridge"
+        }
+    ],
+    "routing": {
+        "table": {
+            "location": "./skywire2/routing.db",
+            "type": "boltdb"
+        },
+        "route_finder": "https://routefinder.skywire.skycoin.net/",
+        "setup_nodes": [
+            "0324579f003e6b4048bae2def4365e634d8e0e3054a20fc7af49daf2a179658557"
+        ]
+    },
+    "transport": {
+        "log_store": {
+            "location": "./skywire/transport_logs",
+            "type": "file"
+        },
+        "discovery": "https://transport.discovery.skywire.skycoin.net"
+    },
+    "messaging": {
+        "server_count": 1,
+        "discovery": "https://messaging.discovery.skywire.skycoin.net"
+    },
+    "node": {
+        "static_secret_key": "7245460d615fe4869ebd1d7f1ac2ad5669915c6fce32a9c1758bfeace895df49" , 
+        "static_public_key": "03477919f99e6d4ab2d0f002fd2313562cb0678bbd2e980c32a2c7e4a2483dab5e"
+    },
+    "version": "1.0"
+}
