@@ -43,7 +43,7 @@ class _StatusScreenState extends State<StatusScreen> {
               child: Column(
                 children: <Widget>[
                   Container(
-                    padding: EdgeInsets.all(35),
+                    padding: EdgeInsets.all(15),
                     child: Text(
                       'Tap icons to cast your needs in your status.',
                     ),
@@ -55,7 +55,7 @@ class _StatusScreenState extends State<StatusScreen> {
                       shrinkWrap: true,
                       crossAxisSpacing: 1,
                       mainAxisSpacing: 1,
-                      children: _buildStatuses(),
+                      children: _buildStatuses(context),
                     ),
                   )
                 ],
@@ -68,9 +68,11 @@ class _StatusScreenState extends State<StatusScreen> {
             ),
             Container(
               constraints: const BoxConstraints(minWidth: double.infinity),
-              padding: EdgeInsets.symmetric(horizontal: 40),
+              padding: EdgeInsets.symmetric(horizontal: 40, vertical: 8),
               color: Colors.black,
-              child: LastStatus(),
+              child: LastStatus(
+                statuses: statuses,
+              ),
             ),
           ],
         ),
@@ -78,14 +80,15 @@ class _StatusScreenState extends State<StatusScreen> {
     );
   }
 
-  List<StatusButton> _buildStatuses() {
+  List<StatusButton> _buildStatuses(BuildContext context) {
     var buttons = List<StatusButton>();
     for (var i = 0; i < Status.values.length; i++) {
       buttons.add(StatusButton(
         status: Status.values[i],
         urgency: statuses.getFieldOrNull(i + 1) ?? Urgency.LOW,
-        handleToggle: (Urgency urgency) =>
-            setState(() => statuses.setField(i + 1, urgency)),
+        handleToggle: (Urgency urgency) {
+          setState(() => statuses.setField(i + 1, urgency));
+        },
       ));
     }
     return buttons;

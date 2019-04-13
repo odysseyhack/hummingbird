@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hummingbird/screens/status_screen.dart';
+import 'package:hummingbird/screens/urgency_selection.dart';
 
 import 'package:hummingbird/status_enum.dart';
 import 'package:hummingbird/generated/hummingbird.pbenum.dart';
@@ -29,7 +31,15 @@ class StatusButton extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: () => handleToggle(_nextUrgency(urgency)),
+          onTap: () async {
+            final newUrgency = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => UrgencySelection(status))) ??
+                urgency;
+
+            handleToggle(newUrgency);
+          },
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
@@ -41,10 +51,13 @@ class StatusButton extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  ColoredOrb(_urgencyToColor(urgency)),
-                  Text(
-                    data.text,
-                    style: TextStyle(color: Colors.white),
+                  ColoredOrb(urgencyToColor(urgency)),
+                  Container(
+                    constraints: BoxConstraints(maxWidth: 80),
+                    child: Text(
+                      data.text,
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                 ],
               )
@@ -59,7 +72,7 @@ class StatusButton extends StatelessWidget {
     switch (status) {
       case Status.ELECTRICITY:
         return const Temp(
-          const IconData(58940, fontFamily: 'MaterialIcons'),
+          const IconData(59698, fontFamily: 'MaterialIcons'),
           "Electricity",
         );
         break;
@@ -83,51 +96,24 @@ class StatusButton extends StatelessWidget {
         break;
       case Status.PROTECTION:
         return const Temp(
-          const IconData(58746, fontFamily: 'MaterialIcons'),
-          "Protection",
+          const IconData(58416, fontFamily: 'MaterialIcons'),
+          "Heating",
         );
         break;
       case Status.SHELTER:
         return const Temp(
-          const IconData(58746, fontFamily: 'MaterialIcons'),
-          "Shelter",
-        );
-        break;
-      case Status.TOOLS:
-        return const Temp(
-          const IconData(58746, fontFamily: 'MaterialIcons'),
-          "Tools",
-        );
-        break;
-      case Status.TRANSPORT:
-        return const Temp(
-          const IconData(58746, fontFamily: 'MaterialIcons'),
-          "Transport",
+          const IconData(57393, fontFamily: 'MaterialIcons'),
+          "Building Collapse",
         );
         break;
       case Status.WATER:
         return const Temp(
-          const IconData(58746, fontFamily: 'MaterialIcons'),
+          const IconData(59537, fontFamily: 'MaterialIcons'),
           "Water",
         );
         break;
       default:
         throw "Unsupported case: " + status.toString();
-    }
-  }
-
-  Color _urgencyToColor(Urgency urgency) {
-    switch (urgency) {
-      case Urgency.LOW:
-        return const Color(0xFF00DF80);
-        break;
-      case Urgency.MEDIUM:
-        return const Color(0xFFFFC125);
-        break;
-      case Urgency.HIGH:
-        return const Color(0xFFFF004E);
-      default:
-        throw "No urgency to color case for " + urgency.toString();
     }
   }
 
