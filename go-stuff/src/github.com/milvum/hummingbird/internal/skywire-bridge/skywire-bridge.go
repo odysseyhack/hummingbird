@@ -2,13 +2,14 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"net"
+	"sync"
+
 	proto "github.com/golang/protobuf/proto"
 	pb "github.com/milvum/hummingbird/proto"
 	"github.com/skycoin/skywire/pkg/app"
 	"github.com/skycoin/skywire/pkg/cipher"
-	"log"
-	"net"
-	"sync"
 )
 
 var (
