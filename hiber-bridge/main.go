@@ -40,6 +40,7 @@ var (
 	d                 = make(chan string)
 	config            configfile
 	counter           = 0
+	exitChannel       chan struct{}
 )
 
 func checkSerialPort(port *enumerator.PortDetails) {
@@ -159,17 +160,7 @@ func executeCommands() {
 	executeCommands()
 }
 
-func main() {
-	color.Yellow("-- Init -- Hiber Control script for Hummingbird v0.0.1")
-
-	// Load configuration file from ./config.json
-	initConfiguration()
-
-	// Find a suitable connected USB device based on config
-	// Only when suitable connected USB device is found, continue with code
-	findSerialPort()
-	// -> portName = array Index in config.json/serialports
-
+func openSerialPort() serial.Port {
 	var options = &serial.Mode{
 		BaudRate: config.Serialports[portID].Baudrate,
 	}
@@ -181,6 +172,22 @@ func main() {
 	} else {
 		color.Green("-- UART -- Port %s opened with baudrate %v", portName, config.Serialports[portID].Baudrate)
 	}
+	return port
+}
+
+func main() {
+	color.Yellow("-- Init -- Hiber Control script for Hummingbird v0.0.1")
+
+	// Load configuration file from ./config.json
+	initConfiguration()
+
+	// Find a suitable connected USB device based on config
+	// Only when suitable connected USB device is found, continue with code
+	findSerialPort()
+	// -> portName = array Index in config.json/serialports
+
+	// open serial port
+	port := openSerialPort()
 	defer port.Close()
 
 	// listen for messages on serial port, put in c channel
@@ -193,6 +200,5 @@ func main() {
 
 	go executeCommands()
 
-	var input string
-	fmt.Scanln(&input)
+	<-exitChannel
 }
