@@ -39,6 +39,7 @@ var (
 	c                 = make(chan string)
 	d                 = make(chan string)
 	config            configfile
+	counter           = 0
 )
 
 func checkSerialPort(port *enumerator.PortDetails) {
@@ -59,13 +60,9 @@ func checkSerialPort(port *enumerator.PortDetails) {
 }
 
 func findSerialPort() {
-	counter := 0
 	for {
 		counter++
-		ports, err := enumerator.GetDetailedPortsList()
-		if err != nil {
-			log.Fatal(err)
-		}
+		ports, _ := enumerator.GetDetailedPortsList()
 		for _, port := range ports {
 			checkSerialPort(port)
 		}
@@ -123,12 +120,17 @@ func writeSerial(serialPort serial.Port) {
 	}
 }
 
-func initConfiguration() {
+func getPath() string {
 	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
 	if err != nil {
 		color.Red("-- Error -- Could not resolve current path")
 	}
 	color.Green("-- Init -- Current path is: %s", dir)
+	return dir
+}
+
+func initConfiguration() {
+	dir := getPath()
 
 	jsonFile, err := os.Open(fmt.Sprintf("%s/config.json", dir))
 	if err != nil {
