@@ -11,56 +11,78 @@ package hummingbird.proto;
 
 // The chat service definition.
 service Hummingbird {
-    // Cast statuses along with their urgency and some basic information
-    rpc CastStatuses (StatusRequest) returns (Reply) {}
+  // Cast statuses along with their urgency and some basic information
+  rpc CastStatuses (StatusRequest) returns (Reply) {}
 
-    // Send a message, tagged for a channel
-    rpc SendMessage (MessageRequest) returns (Reply) {}
+  // Send a message, tagged for a channel
+  rpc SendMessage (MessageRequest) returns (Reply) {}
+}
+
+service HiberBridge {
+  rpc BatchStatuses (stream AggregateStatus) returns (Reply) {}
 }
 
 // Information about a request and its sender
 message StatusRequest {
-    string origin = 1;
-    Statuses statusMap = 2;
-    google.protobuf.Timestamp timestamp = 3;
-    GeoLocation location = 4;
+  string origin = 1;
+  Statuses statusMap = 2;
+  google.protobuf.Timestamp timestamp = 3;
+  GeoLocation location = 4;
 }
 
 // Sender information that is extended with a personal message of the sender, tagged for a channel
 message MessageRequest {
-    StatusRequest info = 1;
-    string message = 2;
-    string channel = 3;
+  StatusRequest info = 1;
+  string message = 2;
+  string channel = 3;
 }
 
 // The regular reply for a request
 message Reply {
-    bool success = 1;
+  bool success = 1;
 }
 
 // Latitude and longtitude coordinates
 message GeoLocation {
-    double lon = 1;
-    double lat = 2;
+  double lon = 1;
+  double lat = 2;
 }
 
 // The different statuses for which you can set an urgency
 // Would've prefered a map<status, urgency> but protobuf does not allow maps of enums
 message Statuses {
-    Urgency WATER = 1;
-    Urgency FIRST_AID = 2;
-    Urgency FOOD = 3;
-    Urgency SHELTER = 4;
-    Urgency PROTECTION = 5;
-    Urgency FIRE = 6;
-    Urgency ELECTRICITY = 7;
-    Urgency TOOLS = 8;
-    Urgency TRANSPORT = 9;
+  Urgency WATER = 1;
+  Urgency FIRST_AID = 2;
+  Urgency FOOD = 3;
+  Urgency SHELTER = 4;
+  Urgency PROTECTION = 5;
+  Urgency FIRE = 6;
+  Urgency ELECTRICITY = 7;
+  Urgency TOOLS = 8;
+  Urgency TRANSPORT = 9;
+}
+
+// Ugly duplication, but enums are the worst in protobuf
+message StatusIntensity {
+  int32 WATER = 1;
+  int32 FIRST_AID = 2;
+  int32 FOOD = 3;
+  int32 SHELTER = 4;
+  int32 PROTECTION = 5;
+  int32 FIRE = 6;
+  int32 ELECTRICITY = 7;
+  int32 TOOLS = 8;
+  int32 TRANSPORT = 9;
 }
 
 // Available urgency levels
 enum Urgency {
-    LOW = 0;
-    MEDIUM = 1;
-    HIGH = 2;
+  LOW = 0;
+  MEDIUM = 1;
+  HIGH = 2;
+}
+
+message AggregateStatus {
+  GeoLocation binnedLocation = 1;
+  StatusIntensity countedStatuses = 2;
 }
