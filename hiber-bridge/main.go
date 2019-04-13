@@ -131,7 +131,7 @@ func getPath() string {
 	return dir
 }
 
-func initConfiguration(configi configfile, dir string) {
+func initConfiguration(dir string) bool {
 	jsonFile, err := os.Open(fmt.Sprintf("%s/config.json", dir))
 	if err != nil {
 		log.Fatal(err)
@@ -141,11 +141,11 @@ func initConfiguration(configi configfile, dir string) {
 
 	byteValue, _ := ioutil.ReadAll(jsonFile)
 
-	err = json.Unmarshal(byteValue, &configi)
+	err = json.Unmarshal(byteValue, &config)
 	if err != nil {
 		fmt.Println(err)
 	}
-	color.Green("-- IO -- Successfully imported config.json")
+	return true
 }
 
 func executeCommands() {
@@ -179,7 +179,9 @@ func main() {
 
 	// Load configuration file from ./config.json
 	dir = getPath()
-	initConfiguration(config, dir)
+	if initConfiguration(dir) {
+		color.Green("-- IO -- Successfully imported config.json")
+	}
 
 	// Find a suitable connected USB device based on config
 	// Only when suitable connected USB device is found, continue with code
