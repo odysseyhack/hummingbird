@@ -1,8 +1,8 @@
 <template>
   <div id="app-home">
-    <div class="logo">
+    <!-- <div class="logo">
       <img src="../assets/logo.png">
-    </div>
+    </div>-->
     <div class="settings">
       <span class="title">Hummingbird</span>
       <a v-on:click="goToSettings">
@@ -12,16 +12,28 @@
         <img src="../assets/logout.svg">
       </a>
     </div>
-    <div class="sidebar"></div>
+    <div class="sidebar">
+      <template v-for="(menu,key,index) in menus">
+        <div
+          @click="changeFilter"
+          class="sidebar-item"
+          v-bind:key="index"
+          v-bind:class="{ sidebarActive: menu.active }"
+        >
+          <img class="sidebar-icon" v-bind:src="menu.icon">
+          <span class="sidebar-label">{{menu.label}}</span>
+        </div>
+      </template>
+    </div>
     <div class="map">
       <GmapMap
-        :center="{lat:10, lng:10}"
-        :zoom="7"
-        map-type-id="terrain"
+        :center="this.center"
+        :zoom="this.zoom"
+        map-type-id="roadmap"
         style="width: 100%; height: 100%"
         :options="{
-          zoomControl: false,
-          mapTypeControl: false,
+          zoomControl: true,
+          mapTypeControl: true,
           scaleControl: false,
           streetViewControl: false,
           rotateControl: false,
@@ -36,6 +48,11 @@
           :draggable="false"
           @click="center=m.position"
         />
+        <template v-for="(marker,key,index) in markers">
+          <gmap-custom-marker :marker="marker" v-bind:key="index">
+            <img src="../assets/icons/Water.svg">
+          </gmap-custom-marker>
+        </template>
       </GmapMap>
     </div>
   </div>
@@ -47,17 +64,64 @@ import GmapCustomMarker from "vue2-gmap-custom-marker";
 export default {
   name: "Home",
   components: {
-    GmapCustomMarker
+    "gmap-custom-marker": GmapCustomMarker
   },
   data() {
     return {
-      markers: {}
+      zoom: 10,
+      center: { lat: 53.269692, lng: 6.818274 },
+      markers: [
+        { lat: 53.289486, lng: 6.838749 },
+        { lat: 53.218609, lng: 6.550166 }
+      ],
+      menus: [
+        {
+          icon: require("../assets/icons/Water icon.svg"),
+          status: true,
+          label: "test",
+          active: false
+        },
+        {
+          icon: require("../assets/icons/Electricity.svg"),
+          status: true,
+          label: "test",
+          active: true
+        },
+        {
+          icon: require("../assets/icons/Fire icon.svg"),
+          status: true,
+          label: "test",
+          active: false
+        },
+        {
+          icon: require("../assets/icons/First aid icon.svg"),
+          status: true,
+          label: "test",
+          active: false
+        }
+      ]
     };
   },
   computed: {},
-  mounted: function() {},
+  mounted: function() {
+    window.setTimeout(() => {
+      let coord = { lat: 53.23311, lng: 6.586164 };
+      this.markers.push(coord);
+      this.zoom = 11;
+      this.center = coord;
+    }, 1000);
+    window.setTimeout(() => {
+      let coord = { lat: 53.242514, lng: 6.65732 };
+      this.markers.push(coord);
+      this.zoom = 11;
+      this.center = coord;
+    }, 5000);
+  },
   mqtt: {},
   methods: {
+    changeFilter: function(msg) {
+      console.log(msg);
+    },
     goToSettings: function() {
       console.log(" -- Go To Settings");
       this.$router.push("/settings");
@@ -112,12 +176,51 @@ export default {
   float: left;
   top: 50px;
   width: 120px;
-  height: calc(100vh - 80px);
+  height: calc(100vh-50px);
+  background: -webkit-linear-gradient(bottom, black, rgb(73, 144, 168));
+}
+
+.sidebar-icon {
+  height: 30px;
+  margin: 0 auto;
+  top: 20px;
+  position: relative;
+  display: block;
+}
+
+.sidebar-label {
+  position: relative;
+  display: block;
+  top: 25px;
+  font-size: 12px;
+  color: whitesmoke;
+}
+
+.sidebar-item {
+  opacity: 0.5;
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100px;
+  background: -webkit-linear-gradient(
+    bottom,
+    rgb(20, 76, 144, 0.7),
+    rgb(73, 144, 168)
+  );
+  -webkit-transition: 0.1s all ease-in-out;
+}
+
+.sidebar-item:hover {
+  opacity: 1;
+}
+
+.sidebarActive {
   background: -webkit-linear-gradient(
     0,
     rgba(0, 114, 255, 0.7),
     rgba(0, 195, 255, 1)
   );
+  opacity: 1;
 }
 
 .map {
@@ -126,7 +229,7 @@ export default {
   right: 0;
   top: 50px;
   width: calc(100vw - 120px);
-  height: calc(100vh - 80px);
+  height: calc(100vh - 50px);
   background-color: black;
 }
 
