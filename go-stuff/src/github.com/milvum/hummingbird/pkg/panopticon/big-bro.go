@@ -3,6 +3,9 @@ package panopticon
 import (
 	"log"
 	"math"
+	"google.golang.org/grpc"
+	"context"
+	"time"
 
 	pb "github.com/milvum/hummingbird/proto"
 )
@@ -25,20 +28,41 @@ func urgencyToIntensity(urgency *pb.Statuses) (intensity pb.StatusIntensity) {
 	return
 }
 
-func aggregateResults(messages []pb.MessageRequest, stream pb.HiberBridge_BatchStatusesClient) {
-	// TODO super super dummy, no binning whatsoever!
-	for _, message := range messages {
-		loc := message.Info.Location
-		intensity := urgencyToIntensity(message.Info.StatusMap)
-		aggregate := pb.AggregateStatus{BinnedLocation: loc, CountedStatuses: &intensity}
-		if err := stream.Send(&aggregate); err != nil {
-			log.Printf("%v.Send(%v) = %v", stream, aggregate, err)
-		}
-	}
-	_, err := stream.CloseAndRecv()
-	if err != nil {
-		log.Fatalf("%v.CloseAndRecv() got error %v, want %v", stream, err, nil)
-	}
-	return
+func aggregateResults(message pb.MessageRequest) pb.AggregateStatus {
+	loc := message.Info.Location
+	intensity := urgencyToIntensity(message.Info.StatusMap)
+	return pb.AggregateStatus{BinnedLocation: loc, CountedStatuses: &intensity}
+}
 
+type hiberBridgeClient struct {
+	destAddr string
+	timeout  time.Duration
+	opts     []grpc.DialOption
+}
+
+func newClient() *hiberBridgeClient {
+	var opts []grpc.DialOption
+	opts = append(opts, grpc.WithInsecure())
+	s := &hiberBridgeClient{opts: opts, timeout: 10 * time.Second}
+	return s
+}
+
+func (c *hiberBridgeClient) uplink(messageRequest pb.MessageRequest) {
+	conn, err := grpc.Dial(c.destAddr, c.opts...)
+	if err != nil {
+		log.Fatalf("fail to dial: %v", err)
+		return
+	}
+	defer conn.Close()
+
+	client := pb.NewHiberBridgeClient(conn)
+
+	ctx, cancel := context.WithTimeout(context.Background(), c.timeout)
+	defer cancel()
+
+	hbp := aggregateResults(messageRequest)
+	_, err = client.BatchStatuses(ctx, &hbp)
+	if err != nil {
+		log.Fatalf("No clue, something went wrong")
+	}
 }
