@@ -34,20 +34,20 @@ func aggregateResults(message pb.MessageRequest) pb.AggregateStatus {
 	return pb.AggregateStatus{BinnedLocation: loc, CountedStatuses: &intensity}
 }
 
-type hiberBridgeClient struct {
+type HiberBridgeClient struct {
 	destAddr string
 	timeout  time.Duration
 	opts     []grpc.DialOption
 }
 
-func newClient() *hiberBridgeClient {
+func NewClient(addr string) *HiberBridgeClient {
 	var opts []grpc.DialOption
 	opts = append(opts, grpc.WithInsecure())
-	s := &hiberBridgeClient{opts: opts, timeout: 10 * time.Second}
+	s := &HiberBridgeClient{opts: opts, timeout: 10 * time.Second, destAddr: addr}
 	return s
 }
 
-func (c *hiberBridgeClient) uplink(messageRequest pb.MessageRequest) {
+func (c *HiberBridgeClient) Uplink(messageRequest pb.MessageRequest) {
 	conn, err := grpc.Dial(c.destAddr, c.opts...)
 	if err != nil {
 		log.Fatalf("fail to dial: %v", err)
