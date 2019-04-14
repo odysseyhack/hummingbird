@@ -2,18 +2,24 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
+	"net"
 	"os"
 	"path/filepath"
 	"strings"
 	"time"
 
 	"github.com/fatih/color"
+	"google.golang.org/grpc"
 
 	"go.bug.st/serial.v1"
 	"go.bug.st/serial.v1/enumerator"
+
+	pb "../go-stuff/src/github.com/milvum/hummingbird/proto"
 )
 
 type configfile struct {
@@ -32,6 +38,7 @@ type serialport struct {
 }
 
 var (
+	serverPort        = flag.Int("port", 8081, "The server port")
 	portName          = ""
 	portID            = 0
 	deviceID          = ""
@@ -175,6 +182,38 @@ func openSerialPort() serial.Port {
 	return port
 }
 
+type hiberbridgeServer struct {
+}
+
+func (s *hiberbridgeServer) BatchStatuses(stream pb.HiberBridge_BatchStatusesServer) error {
+	point, err := stream.Recv()
+	if err == io.EOF {
+		return stream.SendAndClose(&pb.Reply{Success: true})
+	}
+	if err != nil {
+		return err
+	}
+	fmt.Println(point.BinnedLocation.Lon)
+	fmt.Println(point.BinnedLocation.Lat)
+	return nil
+}
+
+func newServer() *hiberbridgeServer {
+	s := &hiberbridgeServer{}
+	return s
+}
+
+func startServer() {
+	flag.Parse()
+	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", *serverPort))
+	if err != nil {
+		log.Fatalf("failed to listen: %v", err)
+	}
+	grpcServer := grpc.NewServer()
+	pb.RegisterHiberBridgeServer(grpcServer, newServer())
+	grpcServer.Serve(lis)
+}
+
 func main() {
 	color.Yellow("-- Init -- Hiber Control script for Hummingbird v0.0.1")
 
@@ -194,6 +233,8 @@ func main() {
 	// open serial port
 	port := openSerialPort()
 	defer port.Close()
+
+	go startServer()
 
 	// listen for messages on serial port, put in c channel
 	go readSerial(port)
