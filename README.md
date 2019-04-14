@@ -7,3 +7,9 @@ In this repository you will find:
 * ./hiber-faker -> Hiber utility (outside scope hackathon) to simulate satellites: virtual desktop satellite
 * ./protobuf -> gRPC API protocol buffer
 * ./vendor -> vendored code
+
+# Architecture
+
+![Architecture overview](https://github.com/odysseyhack/hummingbird/blob/develop/Hummingbird_Architecture1.png)
+
+![Architecture overview](https://github.com/odysseyhack/hummingbird/blob/develop/Hummingbird_Architecture2.png)
