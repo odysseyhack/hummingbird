@@ -18,12 +18,8 @@ service Hummingbird {
   rpc SendMessage (MessageRequest) returns (Reply) {}
 }
 
-message rAggregateStatus {
-  repeated AggregateStatus lst = 1;
-}
-
 service HiberBridge {
-  rpc BatchStatuses (rAggregateStatus) returns (Reply) {}
+  rpc BatchStatuses (AggregateStatus) returns (Reply) {}
 }
 
 // Information about a request and its sender
